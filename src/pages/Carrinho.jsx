@@ -1,18 +1,34 @@
-import React from "react";
+import React, { useContext } from "react";
 import BarraNavegacao from "@/components/BarraNavegacao";
 import Titulo from "@/components/Titulo";
 import Sumario from "@/components/Sumario";
 import ListaProdutosCarrinho from "@/components/ListaProdutosCarrinho";
 import BannerCarrinho from "@/components/BannerCarrinho";
+import { CarrinhoContext } from "@/context/CarrinhoContext";
 
-const Carrinho = ({
-  carrinho,
-  adicionarProduto,
-  removerProduto,
-  removerProdutoCarrinho,
-  valorTotalCarrinho,
-  quantidadeProdutos,
-}) => {
+const Carrinho = () => {
+  const { carrinho, setCarrinho } = useContext(CarrinhoContext);
+
+  function removerProduto(id) {
+    const produto = carrinho.find((itemDoCarrinho) => itemDoCarrinho.id === id);
+
+    const ehOUltimo = produto.quantidade === 1;
+
+    if (ehOUltimo) {
+      return setCarrinho((carrinhoAnterior) =>
+        carrinhoAnterior.filter((itemDoCarrinho) => itemDoCarrinho.id !== id)
+      );
+    }
+
+    setCarrinho((carrinhoAnterior) =>
+      carrinhoAnterior.map((itemDoCarrinho) => {
+        if (itemDoCarrinho.id === id) {
+          itemDoCarrinho.quantidade -= 1;
+          return itemDoCarrinho;
+        }
+      })
+    );
+  }
   return (
     <>
       <BarraNavegacao />
