@@ -1,34 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import BarraNavegacao from "@/components/BarraNavegacao";
 import Titulo from "@/components/Titulo";
 import Sumario from "@/components/Sumario";
 import ListaProdutosCarrinho from "@/components/ListaProdutosCarrinho";
 import BannerCarrinho from "@/components/BannerCarrinho";
-import { CarrinhoContext } from "@/context/CarrinhoContext";
+import { useCarrinhoContext } from "@/hooks/useCarrinhoContext";
 
 const Carrinho = () => {
-  const { carrinho, setCarrinho } = useContext(CarrinhoContext);
+  const { carrinho } = useCarrinhoContext();
 
-  function removerProduto(id) {
-    const produto = carrinho.find((itemDoCarrinho) => itemDoCarrinho.id === id);
-
-    const ehOUltimo = produto.quantidade === 1;
-
-    if (ehOUltimo) {
-      return setCarrinho((carrinhoAnterior) =>
-        carrinhoAnterior.filter((itemDoCarrinho) => itemDoCarrinho.id !== id)
-      );
-    }
-
-    setCarrinho((carrinhoAnterior) =>
-      carrinhoAnterior.map((itemDoCarrinho) => {
-        if (itemDoCarrinho.id === id) {
-          itemDoCarrinho.quantidade -= 1;
-          return itemDoCarrinho;
-        }
-      })
-    );
-  }
   return (
     <>
       <BarraNavegacao />
@@ -43,17 +23,9 @@ const Carrinho = () => {
               <Titulo className="text-center fw-bold mb-3 text-md-start">
                 Detalhes da compra
               </Titulo>
-              <ListaProdutosCarrinho
-                carrinho={carrinho}
-                adicionarProduto={adicionarProduto}
-                removerProduto={removerProduto}
-                removerProdutoCarrinho={removerProdutoCarrinho}
-              />
+              <ListaProdutosCarrinho carrinho={carrinho} />
             </div>
-            <Sumario
-              valorTotalCarrinho={valorTotalCarrinho}
-              quantidadeProdutos={quantidadeProdutos}
-            />
+            <Sumario />
           </div>
         </section>
       </main>
